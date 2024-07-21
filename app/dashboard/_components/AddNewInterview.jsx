@@ -10,17 +10,57 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-
+import { chatSession } from '@/utils/GeminiAIModel';
+import { LoaderCircle } from 'lucide-react';
+import { db } from '@/utils/db';
+import { MockInterview } from '@/utils/schema';
+import { v4 as uuidv4 } from 'uuid';
+import { useUser } from '@clerk/nextjs';
+import moment from 'moment';
 
 function AddNewInterview() {
     const [dialog, setOpenDialog] = useState(false);
     const [jobPosition, setJobPosition] = useState();
     const [jobDescription, setJobDescription] = useState();
     const [jobExperience, setJobExperience] = useState();
+    const [loading, setLoading] = useState(false);
+    const [jsonResponse, setJsonResponse] = useState([]);
+    const { user } = useUser();
 
-    const onSubmit = (e) => {
+    const onSubmit = async (e) => {
+        setLoading(true);
+
         e.preventDefault();
         console.log(jobPosition, jobDescription, jobExperience);
+
+        const InputPrompt = "Job Position: " + jobPosition + ", Job Description: " + jobDescription + ", Years of Experience: " + jobExperience + ", Depends on this Job Position, Job Description and Years of Experience give us " + process.env.NEXT_PUBLIC_INTERVIEW_QUESTION_COUNT + " interview question With answered in json format, Give questions and answered as field in JSON";
+        console.log(InputPrompt);
+
+        const result = await chatSession.sendMessage(InputPrompt);
+        const tempJSONResponse = (result.response.text()).replace('```json', '').replace('```', '');
+        console.log(JSON.parse(tempJSONResponse));
+        setJsonResponse(tempJSONResponse);
+
+        if (tempJSONResponse) {
+
+            const resp = await db.insert(MockInterview).values({
+                mockId: uuidv4(),
+                jsonMockResp: tempJSONResponse,
+                jobPosition: jobPosition,
+                jobDescription: jobDescription,
+                jobExperience: jobExperience,
+                createdBy: user?.primaryEmailAddress?.emailAddress,
+                createdAt: moment().format('DD-MM-yyyy')
+            }).returning({ mockId: MockInterview.mockId })
+
+            console.log("Inserted ID:", resp);
+            if (resp) {
+                setOpenDialog(false);
+            }
+        } else {
+            console.log("ERROR");
+        }
+        setLoading(false);
     }
     return (
         <div>
@@ -60,7 +100,12 @@ function AddNewInterview() {
                                 </div>
                                 <div className='flex gap-5 justify-end'>
                                     <Button type="button" variant="ghost" onClick={() => { setOpenDialog(false) }}>Cancel</Button>
-                                    <Button type="submit">Start Interview</Button>
+                                    <Button type="submit" disabled={loading}>
+                                        {loading ?
+                                            <>
+                                                <LoaderCircle className='animate-spin' />Generating from AI
+                                            </> : 'Start Interview'}
+                                    </Button>
                                 </div>
                             </form>
                         </DialogDescription>
