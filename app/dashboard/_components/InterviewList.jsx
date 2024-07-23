@@ -11,7 +11,7 @@ function InterviewList() {
     const [interviewList, setInterviewList] = useState([]);
     useEffect(() => {
         user && GetInterviewList();
-    }, [user])
+    }, [user, GetInterviewList])
 
     const GetInterviewList = async () => {
         const result = await db.select().from(MockInterview).where(

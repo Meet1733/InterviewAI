@@ -15,7 +15,7 @@ function StartInterview({ params }) {
     const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
     useEffect(() => {
         GetInterviewDetails();
-    }, []);
+    });
 
     //Get Interview Details by MockId/InterviewId
     const GetInterviewDetails = async () => {
