@@ -14,6 +14,7 @@ import { useRouter } from 'next/navigation'
 
 function Feedback({ params }) {
     const [feedbackList, setFeedbackList] = useState([]);
+    const [totalRating, setTotalRating] = useState(0);
     const router = useRouter();
 
     useEffect(() => {
@@ -27,6 +28,18 @@ function Feedback({ params }) {
 
         console.log(result);
         setFeedbackList(result);
+
+        let tr = 0;
+        if (result && result.length > 0) {
+            result.forEach((item) => {
+                tr += Number(item.rating);
+            });
+
+            console.log(tr);
+            tr /= result.length;
+
+            setTotalRating(tr);
+        }
     }
 
     return (
@@ -38,7 +51,7 @@ function Feedback({ params }) {
                 <>
                     <h2 className='text-3xl font-bold text-green-500'>Congratulations!</h2>
                     <h2 className='font-bold text-2xl'>Here is your interview feedback</h2>
-                    <h2 className='text-primary text-lg my-3'>Your overall interview raing: <strong>7/10</strong></h2>
+                    <h2 className='text-primary text-lg my-3'>Your overall interview raing: <strong>{totalRating}/10</strong></h2>
 
                     <h2 className='text-sm text-gray-500'>Find below interview question with correct answer, Your answer and feedback for improvement</h2>
 
