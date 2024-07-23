@@ -12,17 +12,26 @@ function Interview({ params }) {
     const [interviewData, setInterviewData] = useState();
     const [webCamEnabled, setWebCamEnabled] = useState(false);
     useEffect(() => {
+
+        //Get Interview Details by MockId/InterviewId
+        const GetInterviewDetails = async () => {
+            const result = await db.select().from(MockInterview).where(
+                eq(MockInterview.mockId, params.interviewId))
+
+            console.log(result);
+            setInterviewData(result[0]);
+        }
         GetInterviewDetails();
-    })
+    }, [])
 
-    //Get Interview Details by MockId/InterviewId
-    const GetInterviewDetails = async () => {
-        const result = await db.select().from(MockInterview).where(
-            eq(MockInterview.mockId, params.interviewId))
+    // //Get Interview Details by MockId/InterviewId
+    // const GetInterviewDetails = async () => {
+    //     const result = await db.select().from(MockInterview).where(
+    //         eq(MockInterview.mockId, params.interviewId))
 
-        console.log(result);
-        setInterviewData(result[0]);
-    }
+    //     console.log(result);
+    //     setInterviewData(result[0]);
+    // }
 
     return (
         <div className='my-10'>

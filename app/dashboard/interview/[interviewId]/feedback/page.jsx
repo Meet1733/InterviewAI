@@ -18,29 +18,49 @@ function Feedback({ params }) {
     const router = useRouter();
 
     useEffect(() => {
+        const GetFeedback = async () => {
+            const result = await db.select().from(UserAnswer).where(
+                eq(UserAnswer.mockIdRef, params.interviewId)
+            ).orderBy(UserAnswer.id);
+
+            console.log(result);
+            setFeedbackList(result);
+
+            let tr = 0;
+            if (result && result.length > 0) {
+                result.forEach((item) => {
+                    tr += Number(item.rating);
+                });
+
+                console.log(tr);
+                tr /= result.length;
+
+                setTotalRating(tr);
+            }
+        }
         GetFeedback();
     }, [])
 
-    const GetFeedback = async () => {
-        const result = await db.select().from(UserAnswer).where(
-            eq(UserAnswer.mockIdRef, params.interviewId)
-        ).orderBy(UserAnswer.id);
+    // const GetFeedback = async () => {
+    //     const result = await db.select().from(UserAnswer).where(
+    //         eq(UserAnswer.mockIdRef, params.interviewId)
+    //     ).orderBy(UserAnswer.id);
 
-        console.log(result);
-        setFeedbackList(result);
+    //     console.log(result);
+    //     setFeedbackList(result);
 
-        let tr = 0;
-        if (result && result.length > 0) {
-            result.forEach((item) => {
-                tr += Number(item.rating);
-            });
+    //     let tr = 0;
+    //     if (result && result.length > 0) {
+    //         result.forEach((item) => {
+    //             tr += Number(item.rating);
+    //         });
 
-            console.log(tr);
-            tr /= result.length;
+    //         console.log(tr);
+    //         tr /= result.length;
 
-            setTotalRating(tr);
-        }
-    }
+    //         setTotalRating(tr);
+    //     }
+    // }
 
     return (
         <div className='p-10'>

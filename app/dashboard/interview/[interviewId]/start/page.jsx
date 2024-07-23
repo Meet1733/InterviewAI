@@ -14,18 +14,27 @@ function StartInterview({ params }) {
     const [mockInterviewQuestion, setMockInterviewQuestion] = useState();
     const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
     useEffect(() => {
+        // Get Interview Details by MockId / InterviewId
+        const GetInterviewDetails = async () => {
+            const result = await db.select().from(MockInterview).where(
+                eq(MockInterview.mockId, params.interviewId))
+
+            const jsonMockResp = JSON.parse(result[0].jsonMockResp);
+            setMockInterviewQuestion(jsonMockResp);
+            setInterviewData(result[0]);
+        }
         GetInterviewDetails();
-    });
+    }, []);
 
-    //Get Interview Details by MockId/InterviewId
-    const GetInterviewDetails = async () => {
-        const result = await db.select().from(MockInterview).where(
-            eq(MockInterview.mockId, params.interviewId))
+    // //Get Interview Details by MockId/InterviewId
+    // const GetInterviewDetails = async () => {
+    //     const result = await db.select().from(MockInterview).where(
+    //         eq(MockInterview.mockId, params.interviewId))
 
-        const jsonMockResp = JSON.parse(result[0].jsonMockResp);
-        setMockInterviewQuestion(jsonMockResp);
-        setInterviewData(result[0]);
-    }
+    //     const jsonMockResp = JSON.parse(result[0].jsonMockResp);
+    //     setMockInterviewQuestion(jsonMockResp);
+    //     setInterviewData(result[0]);
+    // }
 
     return (
         <div>
