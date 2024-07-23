@@ -3,14 +3,12 @@ import { UserButton } from '@clerk/nextjs'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import React, { useEffect } from 'react'
+import React from 'react'
 
 function Header() {
 
     const path = usePathname();
-    useEffect(() => {
-        console.log(path);
-    }, [path])
+
     return (
         <div className='flex p-4 items-center justify-between bg-secondary shadow-sm'>
             <Link href={'/'}>
