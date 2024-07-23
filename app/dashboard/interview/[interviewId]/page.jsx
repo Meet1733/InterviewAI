@@ -22,7 +22,7 @@ function Interview({ params }) {
             setInterviewData(result[0]);
         }
         GetInterviewDetails();
-    }, [])
+    }, [params.interviewId])
 
     // //Get Interview Details by MockId/InterviewId
     // const GetInterviewDetails = async () => {

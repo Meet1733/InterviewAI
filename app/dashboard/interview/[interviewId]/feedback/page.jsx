@@ -39,7 +39,7 @@ function Feedback({ params }) {
             }
         }
         GetFeedback();
-    }, [])
+    }, [params.interviewId])
 
     // const GetFeedback = async () => {
     //     const result = await db.select().from(UserAnswer).where(
