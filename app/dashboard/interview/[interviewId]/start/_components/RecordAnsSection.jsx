@@ -47,7 +47,7 @@ function RecordAnsSection({ mockInterviewQuestion, activeQuestionIndex, intervie
 
             const result = await chatSession.sendMessage(feedbackPrompt);
             const mockJsonResp = (result.response.text()).replace('```json', '').replace('```', '');
-            console.log(mockJsonResp);
+            // console.log(mockJsonResp);
             const JsonFeedbackResp = JSON.parse(mockJsonResp);
 
             const resp = await db.insert(UserAnswer).values({
