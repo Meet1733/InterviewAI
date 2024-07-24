@@ -35,17 +35,18 @@ function AddNewInterview() {
         e.preventDefault();
         // console.log(jobPosition, jobDescription, jobExperience);
 
-        const InputPrompt = `Job Position: ${jobPosition}, Job Description: ${jobDescription}, Years of Experience: ${jobExperience}, Depends on this Job Position, Job Description and Years of Experience give us ${process.env.NEXT_PUBLIC_INTERVIEW_QUESTION_COUNT} interview question With answered in json format, Give questions and answered as field in JSON. One example of sample output is as given below,
+        const InputPrompt = `Job Position: ${jobPosition}, Job Description: ${jobDescription}, Years of Experience: ${jobExperience}. Based on this Job Position, Job Description, and Years of Experience, provide ${process.env.NEXT_PUBLIC_INTERVIEW_QUESTION_COUNT} interview questions with answers in JSON format. Each question and answer should be fields in the JSON. An example of the expected output is given below:
         [
           {
-            "question": "ques1 here",
-            "answer": "Ans1 here"
+            "question": "Sample question 1",
+            "answer": "Sample answer 1"
           },
           {
-            "question": "ques2 here",
-            "answer": "Ans2 here"
-          },
-        ]`;
+            "question": "Sample question 2",
+            "answer": "Sample answer 2"
+          }
+        ]
+        Only provide the questions and answers in the specified JSON format without any additional explanation.`;
         // console.log(InputPrompt);
 
         const result = await chatSession.sendMessage(InputPrompt);
